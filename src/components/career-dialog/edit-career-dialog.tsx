@@ -1,4 +1,4 @@
-import { BaseCareerDialog } from "./base-career-dialog";
+import { BaseCareerDialog } from "./components/base-career-dialog";
 import { useEditCareerDialog } from "./use-edit-career-dialog";
 
 export function EditCareerDialog() {
