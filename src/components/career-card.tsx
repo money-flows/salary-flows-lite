@@ -22,7 +22,7 @@ export function CareerCard({
           {companyName}
         </h3>
         <div className="text-muted-foreground text-sm">
-          {`${startMonth} ~ ${endMonth}`}
+          {`${startMonth} 〜 ${endMonth}`}
         </div>
       </div>
       <Button

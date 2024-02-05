@@ -6,6 +6,7 @@ import {
   useEditCareerDialog,
   useNewCareerDialog,
 } from "@/components/career-dialog";
+import { Card } from "./components/ui/card";
 
 function App() {
   const { onOpen: onNewCareerDialogOpen } = useNewCareerDialog();
@@ -15,7 +16,7 @@ function App() {
     <main className="mx-auto flex min-h-screen w-full max-w-[40rem] flex-col gap-8 px-8 pt-16">
       <h1 className="text-center text-3xl font-bold">給与推移グラフ化ツール</h1>
 
-      <div className="flex flex-col space-y-4">
+      <Card className="flex flex-col space-y-4 p-4">
         <Button variant="default" onClick={onNewCareerDialogOpen}>
           職歴を追加する
         </Button>
@@ -40,7 +41,7 @@ function App() {
           endMonth="2022年10月"
           onEdit={onEditCareerDialogOpen}
         />
-      </div>
+      </Card>
 
       <NewCareerDialog />
       <EditCareerDialog />
