@@ -59,7 +59,6 @@ function YearAndMonthInput({
                 {...field}
                 onChange={(e) => {
                   field.onChange(e);
-                  console.log("onChange");
                   updateSalaries();
                 }}
               />
