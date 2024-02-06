@@ -16,12 +16,15 @@ export function BaseCareerDialogForm({ onClose }: BaseCareerDialogFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       companyName: "",
-      startYear: "2000",
+      startYear: "2020",
       startMonth: "1",
-      endYear: "2000",
-      endMonth: "1",
+      endYear: "2020",
+      endMonth: "12",
       isCurrentlyEmployed: false,
-      salaries: [{ gross: 0, net: 0 }],
+      salaries: Array.from({ length: 12 }).map(() => ({
+        gross: "0",
+        net: "0",
+      })),
     },
   });
 
