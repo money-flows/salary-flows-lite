@@ -26,9 +26,14 @@ function SalaryTableRow({ yearAndMonth, rowIndex }: SalaryTableRowProps) {
   const form = useFormContext<FormSchema>();
 
   return (
-    <TableRow>
-      <TableCell className="font-medium">{yearAndMonth}</TableCell>
-      <TableCell>
+    <TableRow
+      style={{ transform: `translateY(${60 * rowIndex}px)` }}
+      className="absolute flex h-[60px] w-full"
+    >
+      <TableCell className="flex w-1/3 items-center font-medium">
+        {yearAndMonth}
+      </TableCell>
+      <TableCell className="flex w-1/3 items-center">
         <FormField
           control={form.control}
           name={`salaries.${rowIndex}.gross`}
@@ -41,7 +46,7 @@ function SalaryTableRow({ yearAndMonth, rowIndex }: SalaryTableRowProps) {
           )}
         />
       </TableCell>
-      <TableCell>
+      <TableCell className="flex w-1/3 items-center">
         <FormField
           control={form.control}
           name={`salaries.${rowIndex}.net`}
@@ -87,15 +92,21 @@ export function SalaryTable() {
     <div className="space-y-2">
       <Label>給与</Label>
       <Card>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[8rem]">年月</TableHead>
-              <TableHead>給与</TableHead>
-              <TableHead>手取り</TableHead>
+        <Table
+          className="grid"
+          containerClassName="overflow-auto relative h-96"
+        >
+          <TableHeader className="sticky top-0 z-10 grid rounded-lg bg-white">
+            <TableRow className="flex w-full">
+              <TableHead className="flex w-1/3 items-center">年月</TableHead>
+              <TableHead className="flex w-1/3 items-center">給与</TableHead>
+              <TableHead className="flex w-1/3 items-center">手取り</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody
+            style={{ height: `${yearAndMonthRange.length * 60}px` }}
+            className="relative grid"
+          >
             {yearAndMonthRange.map((_, index) => (
               <SalaryTableRow
                 key={index}
