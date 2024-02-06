@@ -6,10 +6,10 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Schema } from "./schema";
+import { FormSchema } from "./form-schema";
 
 export function CompanyName() {
-  const form = useFormContext<Schema>();
+  const form = useFormContext<FormSchema>();
 
   return (
     <FormField

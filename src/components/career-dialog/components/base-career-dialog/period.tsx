@@ -1,4 +1,5 @@
-import { useFormContext } from "react-hook-form";
+import { useCallback } from "react";
+import { useFormContext, useFieldArray } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,7 +9,9 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Schema } from "./schema";
+import { FormSchema } from "./form-schema";
+import { getYearAndMonthRangeLength } from "./utils/generate-year-and-month-range";
+import { getPeriod } from "./utils/period";
 
 function YearAndMonthInput({
   yearName,
@@ -17,7 +20,30 @@ function YearAndMonthInput({
   yearName: "startYear" | "endYear";
   monthName: "startMonth" | "endMonth";
 }) {
-  const form = useFormContext<Schema>();
+  const form = useFormContext<FormSchema>();
+  const { fields, append } = useFieldArray({
+    name: "salaries",
+    control: form.control,
+  });
+
+  const updateSalaries = useCallback(() => {
+    const startYear = form.getValues("startYear");
+    const startMonth = form.getValues("startMonth");
+    const endYear = form.getValues("endYear");
+    const endMonth = form.getValues("endMonth");
+
+    const period = getPeriod(startYear, startMonth, endYear, endMonth);
+
+    if (period) {
+      const yearAndMonthRangeLength = getYearAndMonthRangeLength(period);
+
+      if (fields.length < yearAndMonthRangeLength) {
+        for (let i = fields.length; i < yearAndMonthRangeLength; i++) {
+          append({ gross: 0, net: 0 });
+        }
+      }
+    }
+  }, [form, fields, append]);
 
   return (
     <div className="flex items-center gap-1.5">
@@ -25,9 +51,18 @@ function YearAndMonthInput({
         control={form.control}
         name={yearName}
         render={({ field }) => (
-          <FormItem className="w-16 text-center">
+          <FormItem>
             <FormControl>
-              <Input {...field} />
+              <Input
+                type="number"
+                className="w-[5.5rem] text-center"
+                {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  console.log("onChange");
+                  updateSalaries();
+                }}
+              />
             </FormControl>
           </FormItem>
         )}
@@ -37,9 +72,17 @@ function YearAndMonthInput({
         control={form.control}
         name={monthName}
         render={({ field }) => (
-          <FormItem className="w-10 text-center">
+          <FormItem>
             <FormControl>
-              <Input {...field} />
+              <Input
+                type="number"
+                className="w-14 text-center"
+                {...field}
+                onChange={(e) => {
+                  field.onChange(e);
+                  updateSalaries();
+                }}
+              />
             </FormControl>
           </FormItem>
         )}
@@ -50,7 +93,7 @@ function YearAndMonthInput({
 }
 
 export function Period() {
-  const form = useFormContext<Schema>();
+  const form = useFormContext<FormSchema>();
   const isCurrentlyEmployed = form.watch("isCurrentlyEmployed");
 
   return (
