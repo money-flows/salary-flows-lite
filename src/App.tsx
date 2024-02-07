@@ -7,8 +7,10 @@ import {
   useNewCareerDialog,
 } from "@/components/career-dialog";
 import { Card } from "./components/ui/card";
+import { useCareers } from "./hooks/use-careers";
 
 function App() {
+  const { careers } = useCareers();
   const { onOpen: onNewCareerDialogOpen } = useNewCareerDialog();
   const { onOpen: onEditCareerDialogOpen } = useEditCareerDialog();
 
@@ -21,26 +23,13 @@ function App() {
           職歴を追加する
         </Button>
 
-        <CareerCard
-          companyName="株式会社AAA"
-          startMonth="2022年5月"
-          endMonth="2022年10月"
-          onEdit={onEditCareerDialogOpen}
-        />
-
-        <CareerCard
-          companyName="株式会社AAA"
-          startMonth="2022年5月"
-          endMonth="2022年10月"
-          onEdit={onEditCareerDialogOpen}
-        />
-
-        <CareerCard
-          companyName="株式会社AAA"
-          startMonth="2022年5月"
-          endMonth="2022年10月"
-          onEdit={onEditCareerDialogOpen}
-        />
+        {careers.map((career, index) => (
+          <CareerCard
+            key={index}
+            career={career}
+            onEdit={onEditCareerDialogOpen}
+          />
+        ))}
       </Card>
 
       <NewCareerDialog />

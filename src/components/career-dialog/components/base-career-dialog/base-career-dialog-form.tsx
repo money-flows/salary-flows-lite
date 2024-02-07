@@ -6,12 +6,15 @@ import { Period } from "./period";
 import { formSchema, FormSchema, TransformedFormSchema } from "./form-schema";
 import { CompanyName } from "./company-name";
 import { SalaryTable } from "./salary-table";
+import { useCareers } from "@/hooks/use-careers";
 
 interface BaseCareerDialogFormProps {
   onClose: () => void;
 }
 
 export function BaseCareerDialogForm({ onClose }: BaseCareerDialogFormProps) {
+  const { addCareer } = useCareers();
+
   const form = useForm<FormSchema, any, TransformedFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,7 +34,17 @@ export function BaseCareerDialogForm({ onClose }: BaseCareerDialogFormProps) {
   });
 
   const onSubmit: SubmitHandler<TransformedFormSchema> = (data) => {
-    console.log(data);
+    addCareer({
+      companyName: data.companyName,
+      startYear: data.startYear,
+      startMonth: data.startMonth,
+      endYear: data.validEndYear,
+      endMonth: data.validEndMonth,
+      salaries: data.salaries.map((salary) => ({
+        gross: salary.gross,
+        net: salary.net,
+      })),
+    });
     onClose();
   };
 

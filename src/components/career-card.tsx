@@ -1,32 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Career } from "@/types/career";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 
 interface CareerCardProps {
-  companyName: string;
-  startMonth: string;
-  endMonth: string;
+  career: Career;
   onEdit: () => void;
 }
 
-export function CareerCard({
-  companyName,
-  startMonth,
-  endMonth,
-  onEdit,
-}: CareerCardProps) {
+export function CareerCard({ career, onEdit }: CareerCardProps) {
   return (
-    <Card className="flex items-center justify-between p-6">
+    <Card className="flex items-center justify-between p-6 gap-2">
       <div className="space-y-1.5">
-        <h3 className="text-2xl font-semibold leading-none tracking-tight">
-          {companyName}
+        <h3 className="text-xl font-semibold tracking-tight">
+          {career.companyName}
         </h3>
         <div className="text-muted-foreground text-sm">
-          {`${startMonth} 〜 ${endMonth}`}
+          {`${career.startYear}年${career.startMonth}月 〜 ${career.endYear}年${career.endMonth}月`}
         </div>
       </div>
       <Button
-        className="rounded-xl"
+        className="rounded-xl shrink-0"
         variant="secondary"
         size="icon"
         onClick={onEdit}
