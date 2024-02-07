@@ -1,16 +1,16 @@
 import { Period } from "../types";
 
 function isValidPeriod(
-  startYear: string,
-  startMonth: string,
-  endYear: string,
-  endMonth: string,
+  startYear: number,
+  startMonth: number,
+  endYear: number,
+  endMonth: number,
 ) {
   if (
-    startYear === "" ||
-    startMonth === "" ||
-    endYear === "" ||
-    endMonth === ""
+    Number.isNaN(startYear) ||
+    Number.isNaN(startMonth) ||
+    Number.isNaN(endYear) ||
+    Number.isNaN(endMonth)
   ) {
     return false;
   }
@@ -25,18 +25,19 @@ function isValidPeriod(
 }
 
 export function getPeriod(
-  startYear: string,
-  startMonth: string,
-  endYear: string,
-  endMonth: string,
+  startYear: number,
+  startMonth: number,
+  endYear: number,
+  endMonth: number,
 ): Period | undefined {
   if (!isValidPeriod(startYear, startMonth, endYear, endMonth)) {
     return undefined;
   }
+
   return {
-    startYear: parseInt(startYear),
-    startMonth: parseInt(startMonth),
-    endYear: parseInt(endYear),
-    endMonth: parseInt(endMonth),
+    startYear: startYear,
+    startMonth: startMonth,
+    endYear: endYear,
+    endMonth: endMonth,
   };
 }

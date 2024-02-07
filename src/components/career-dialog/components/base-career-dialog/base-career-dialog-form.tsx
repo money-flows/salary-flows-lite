@@ -20,6 +20,8 @@ export function BaseCareerDialogForm({ onClose }: BaseCareerDialogFormProps) {
       startMonth: "1",
       endYear: "2020",
       endMonth: "12",
+      validEndYear: 2020,
+      validEndMonth: 12,
       isCurrentlyEmployed: false,
       salaries: Array.from({ length: 12 }).map(() => ({
         gross: "0",

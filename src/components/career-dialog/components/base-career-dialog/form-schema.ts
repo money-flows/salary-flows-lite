@@ -18,6 +18,8 @@ export const formSchema = z.object({
     .string()
     .min(1)
     .transform((value) => parseInt(value)),
+  validEndYear: z.number().int(),
+  validEndMonth: z.number().int(),
   salaries: z.array(
     z.object({
       gross: z

@@ -40,7 +40,7 @@ function SalaryTableRow({ yearAndMonth, rowIndex }: SalaryTableRowProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input className="text-right" {...field} />
+                <Input type="number" className="text-right" {...field} />
               </FormControl>
             </FormItem>
           )}
@@ -53,7 +53,7 @@ function SalaryTableRow({ yearAndMonth, rowIndex }: SalaryTableRowProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input className="text-right" {...field} />
+                <Input type="number" className="text-right" {...field} />
               </FormControl>
             </FormItem>
           )}
@@ -68,19 +68,23 @@ export function SalaryTable() {
 
   const startYear = form.watch("startYear");
   const startMonth = form.watch("startMonth");
-  const endYear = form.watch("endYear");
-  const endMonth = form.watch("endMonth");
-  // const isCurrentlyEmployed = form.watch("isCurrentlyEmployed");
+  const validEndYear = form.watch("validEndYear");
+  const validEndMonth = form.watch("validEndMonth");
 
   const [latestValidPeriod, setLatestValidPeriod] = useState<Period>();
 
   useEffect(() => {
-    const period = getPeriod(startYear, startMonth, endYear, endMonth);
+    const period = getPeriod(
+      parseInt(startYear),
+      parseInt(startMonth),
+      validEndYear,
+      validEndMonth,
+    );
 
     if (period) {
       setLatestValidPeriod(period);
     }
-  }, [startYear, startMonth, endYear, endMonth]);
+  }, [startYear, startMonth, validEndYear, validEndMonth]);
 
   if (!latestValidPeriod) {
     return null;

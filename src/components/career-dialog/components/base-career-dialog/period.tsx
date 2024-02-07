@@ -29,17 +29,22 @@ function YearAndMonthInput({
   const updateSalaries = useCallback(() => {
     const startYear = form.getValues("startYear");
     const startMonth = form.getValues("startMonth");
-    const endYear = form.getValues("endYear");
-    const endMonth = form.getValues("endMonth");
+    const validEndYear = form.getValues("validEndYear");
+    const validEndMonth = form.getValues("validEndMonth");
 
-    const period = getPeriod(startYear, startMonth, endYear, endMonth);
+    const period = getPeriod(
+      parseInt(startYear),
+      parseInt(startMonth),
+      validEndYear,
+      validEndMonth
+    );
 
     if (period) {
       const yearAndMonthRangeLength = getYearAndMonthRangeLength(period);
 
       if (fields.length < yearAndMonthRangeLength) {
         for (let i = fields.length; i < yearAndMonthRangeLength; i++) {
-          append({ gross: 0, net: 0 });
+          append({ gross: "0", net: "0" });
         }
       }
     }
@@ -91,6 +96,79 @@ function YearAndMonthInput({
   );
 }
 
+function CurrentEmployedCheckbox() {
+  const form = useFormContext<FormSchema>();
+  const { fields, append } = useFieldArray({
+    name: "salaries",
+    control: form.control,
+  });
+
+  const updateValidEndDate = useCallback(
+    (checked: boolean) => {
+      let validEndYear;
+      let validEndMonth;
+
+      if (checked) {
+        const today = new Date();
+        validEndYear = today.getFullYear();
+        validEndMonth = today.getMonth();
+      } else {
+        const endYear = form.getValues("endYear");
+        const endMonth = form.getValues("endMonth");
+        validEndYear = parseInt(endYear);
+        validEndMonth = parseInt(endMonth);
+      }
+
+      form.setValue("validEndYear", validEndYear);
+      form.setValue("validEndMonth", validEndMonth);
+
+      const startYear = form.getValues("startYear");
+      const startMonth = form.getValues("startMonth");
+
+      const period = getPeriod(
+        parseInt(startYear),
+        parseInt(startMonth),
+        validEndYear,
+        validEndMonth
+      );
+
+      if (period) {
+        const yearAndMonthRangeLength = getYearAndMonthRangeLength(period);
+
+        if (fields.length < yearAndMonthRangeLength) {
+          for (let i = fields.length; i < yearAndMonthRangeLength; i++) {
+            append({ gross: "0", net: "0" });
+          }
+        }
+      }
+    },
+    [form, fields, append]
+  );
+
+  return (
+    <FormField
+      control={form.control}
+      name="isCurrentlyEmployed"
+      render={({ field }) => (
+        <FormItem className="flex items-center gap-2 space-y-0">
+          <FormControl>
+            <Checkbox
+              checked={field.value}
+              onCheckedChange={(checked) => {
+                field.onChange(checked);
+                if (checked !== "indeterminate") {
+                  updateValidEndDate(checked);
+                }
+              }}
+            />
+          </FormControl>
+          <FormLabel>現在も在籍中</FormLabel>
+        </FormItem>
+      )}
+    />
+  );
+}
+
 export function Period() {
   const form = useFormContext<FormSchema>();
   const isCurrentlyEmployed = form.watch("isCurrentlyEmployed");
@@ -109,21 +187,7 @@ export function Period() {
             <YearAndMonthInput yearName="endYear" monthName="endMonth" />
           )}
         </div>
-        <FormField
-          control={form.control}
-          name="isCurrentlyEmployed"
-          render={({ field }) => (
-            <FormItem className="flex items-center gap-2 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <FormLabel>現在も在籍中</FormLabel>
-            </FormItem>
-          )}
-        />
+        <CurrentEmployedCheckbox />
       </div>
     </div>
   );
