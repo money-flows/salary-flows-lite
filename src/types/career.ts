@@ -9,5 +9,6 @@ export interface Career {
   startMonth: number;
   endYear: number;
   endMonth: number;
+  isCurrentlyEmployed: boolean;
   salaries: Salary[];
 }

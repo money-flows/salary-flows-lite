@@ -7,29 +7,39 @@ import { formSchema, FormSchema, TransformedFormSchema } from "./form-schema";
 import { CompanyName } from "./company-name";
 import { SalaryTable } from "./salary-table";
 import { useCareers } from "@/hooks/use-careers";
+import { Career } from "@/types/career";
 
 interface BaseCareerDialogFormProps {
+  defaultValues?: Career;
   onClose: () => void;
 }
 
-export function BaseCareerDialogForm({ onClose }: BaseCareerDialogFormProps) {
+export function BaseCareerDialogForm({
+  defaultValues,
+  onClose,
+}: BaseCareerDialogFormProps) {
   const { addCareer } = useCareers();
 
   const form = useForm<FormSchema, any, TransformedFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyName: "",
-      startYear: "2020",
-      startMonth: "1",
-      endYear: "2020",
-      endMonth: "12",
-      validEndYear: 2020,
-      validEndMonth: 12,
-      isCurrentlyEmployed: false,
-      salaries: Array.from({ length: 12 }).map(() => ({
-        gross: "0",
-        net: "0",
-      })),
+      companyName: defaultValues?.companyName ?? "",
+      startYear: `${defaultValues?.startYear ?? 2020}`,
+      startMonth: `${defaultValues?.startMonth ?? 1}`,
+      endYear: `${defaultValues?.endYear ?? 2020}`,
+      endMonth: `${defaultValues?.endMonth ?? 12}`,
+      validEndYear: defaultValues?.endYear ?? 2020,
+      validEndMonth: defaultValues?.endMonth ?? 12,
+      isCurrentlyEmployed: defaultValues?.isCurrentlyEmployed ?? false,
+      salaries:
+        defaultValues?.salaries.map((salary) => ({
+          gross: `${salary.gross}`,
+          net: `${salary.net}`,
+        })) ??
+        Array.from({ length: 12 }).map(() => ({
+          gross: "0",
+          net: "0",
+        })),
     },
   });
 
@@ -40,6 +50,7 @@ export function BaseCareerDialogForm({ onClose }: BaseCareerDialogFormProps) {
       startMonth: data.startMonth,
       endYear: data.validEndYear,
       endMonth: data.validEndMonth,
+      isCurrentlyEmployed: data.isCurrentlyEmployed,
       salaries: data.salaries.map((salary) => ({
         gross: salary.gross,
         net: salary.net,

@@ -20,6 +20,7 @@ export const formSchema = z.object({
     .transform((value) => parseInt(value)),
   validEndYear: z.number().int(),
   validEndMonth: z.number().int(),
+  isCurrentlyEmployed: z.boolean(),
   salaries: z.array(
     z.object({
       gross: z
@@ -30,9 +31,8 @@ export const formSchema = z.object({
         .string()
         .min(1)
         .transform((value) => parseInt(value)),
-    }),
+    })
   ),
-  isCurrentlyEmployed: z.boolean().optional(),
 });
 
 export type FormSchema = z.input<typeof formSchema>;

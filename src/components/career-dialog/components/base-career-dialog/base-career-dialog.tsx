@@ -5,15 +5,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { BaseCareerDialogForm } from "./base-career-dialog-form";
+import { Career } from "@/types/career";
 
 interface BaseCareerDialogProps {
   title: string;
+  defaultValues?: Career;
   isOpen: boolean;
   onClose: () => void;
 }
 
 export function BaseCareerDialog({
   title,
+  defaultValues,
   isOpen,
   onClose,
 }: BaseCareerDialogProps) {
@@ -23,7 +26,7 @@ export function BaseCareerDialog({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <BaseCareerDialogForm onClose={onClose} />
+        <BaseCareerDialogForm defaultValues={defaultValues} onClose={onClose} />
       </DialogContent>
     </Dialog>
   );
