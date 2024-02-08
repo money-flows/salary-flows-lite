@@ -8,12 +8,24 @@ import {
 } from "@/components/career-dialog";
 import { Card } from "./components/ui/card";
 import { useCareers } from "./hooks/use-careers";
+import {
+  ImportFileDialog,
+  useImportFileDialog,
+} from "./components/import-file-dialog";
 
 function ImportTabContent() {
+  const { onOpen } = useImportFileDialog();
+
   return (
-    <Card className="flex flex-col space-y-4 p-4">
-      <Button variant="default">楽天銀行（CSV形式）</Button>
-    </Card>
+    <>
+      <Card className="flex flex-col space-y-4 p-4">
+        <Button variant="default" onClick={onOpen}>
+          楽天銀行（CSV形式）
+        </Button>
+      </Card>
+
+      <ImportFileDialog />
+    </>
   );
 }
 
@@ -22,15 +34,20 @@ function ManualTabContent() {
   const { onOpen } = useNewCareerDialog();
 
   return (
-    <Card className="flex flex-col space-y-4 p-4">
-      <Button variant="default" onClick={onOpen}>
-        職歴を追加する
-      </Button>
+    <>
+      <Card className="flex flex-col space-y-4 p-4">
+        <Button variant="default" onClick={onOpen}>
+          職歴を追加する
+        </Button>
 
-      {careers.map((career, index) => (
-        <CareerCard key={index} career={career} />
-      ))}
-    </Card>
+        {careers.map((career, index) => (
+          <CareerCard key={index} career={career} />
+        ))}
+      </Card>
+
+      <NewCareerDialog />
+      <EditCareerDialog />
+    </>
   );
 }
 
@@ -42,7 +59,7 @@ function App() {
       <Tabs defaultValue="import">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="import" className="font-semibold">
-            外部データからインポート
+            外部データを取り込む
           </TabsTrigger>
           <TabsTrigger value="manual" className="font-semibold">
             手入力
@@ -55,9 +72,6 @@ function App() {
           <ManualTabContent />
         </TabsContent>
       </Tabs>
-
-      <NewCareerDialog />
-      <EditCareerDialog />
     </main>
   );
 }

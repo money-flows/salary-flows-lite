@@ -10,7 +10,7 @@ export interface DropzoneProps
     "value" | "onChange" | "onDrop"
   > {
   className?: string;
-  classNames?: { root: string; input: string };
+  classNames?: { root: string; inner: string };
   children?: React.ReactNode;
   onDrop?: (acceptedFiles: FileList | null) => void;
 }
@@ -61,11 +61,11 @@ const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
         <Input
           ref={inputRef}
           type="file"
-          className={cn("hidden", classNames?.input, className)}
+          className="hidden"
           onChange={handleChangeInput}
           {...props}
         />
-        <div>{children}</div>
+        <div className={cn(classNames?.inner, className)}>{children}</div>
       </Card>
     );
   }
