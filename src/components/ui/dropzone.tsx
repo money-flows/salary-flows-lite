@@ -12,7 +12,7 @@ export interface DropzoneProps
   className?: string;
   classNames?: { root: string; inner: string };
   children?: React.ReactNode;
-  onDrop?: (acceptedFiles: FileList | null) => void;
+  onDrop?: (acceptedFiles: FileList | null) => void | Promise<void>;
 }
 
 const Dropzone = React.forwardRef<HTMLDivElement, DropzoneProps>(
