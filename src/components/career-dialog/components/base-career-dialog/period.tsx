@@ -12,6 +12,7 @@ import {
 import { FormSchema } from "./form-schema";
 import { getYearAndMonthRangeLength } from "./utils/generate-year-and-month-range";
 import { getPeriod } from "./utils/period";
+import { transform } from "./utils/number-input";
 
 function YearAndMonthInput({
   yearName,
@@ -33,8 +34,8 @@ function YearAndMonthInput({
     const validEndMonth = form.getValues("validEndMonth");
 
     const period = getPeriod(
-      parseInt(startYear),
-      parseInt(startMonth),
+      startYear,
+      startMonth,
       validEndYear,
       validEndMonth
     );
@@ -44,7 +45,7 @@ function YearAndMonthInput({
 
       if (fields.length < yearAndMonthRangeLength) {
         for (let i = fields.length; i < yearAndMonthRangeLength; i++) {
-          append({ gross: "0", net: "0" });
+          append({ gross: 0, net: 0 });
         }
       }
     }
@@ -63,9 +64,10 @@ function YearAndMonthInput({
                 className="w-[5.5rem] text-center"
                 {...field}
                 onChange={(e) => {
-                  field.onChange(e);
+                  field.onChange(transform.output(e));
                   updateSalaries();
                 }}
+                value={transform.input(field.value)}
               />
             </FormControl>
           </FormItem>
@@ -83,9 +85,10 @@ function YearAndMonthInput({
                 className="w-14 text-center"
                 {...field}
                 onChange={(e) => {
-                  field.onChange(e);
+                  field.onChange(transform.output(e));
                   updateSalaries();
                 }}
+                value={transform.input(field.value)}
               />
             </FormControl>
           </FormItem>
@@ -115,8 +118,8 @@ function CurrentEmployedCheckbox() {
       } else {
         const endYear = form.getValues("endYear");
         const endMonth = form.getValues("endMonth");
-        validEndYear = parseInt(endYear);
-        validEndMonth = parseInt(endMonth);
+        validEndYear = endYear;
+        validEndMonth = endMonth;
       }
 
       form.setValue("validEndYear", validEndYear);
@@ -126,8 +129,8 @@ function CurrentEmployedCheckbox() {
       const startMonth = form.getValues("startMonth");
 
       const period = getPeriod(
-        parseInt(startYear),
-        parseInt(startMonth),
+        startYear,
+        startMonth,
         validEndYear,
         validEndMonth
       );
@@ -137,7 +140,7 @@ function CurrentEmployedCheckbox() {
 
         if (fields.length < yearAndMonthRangeLength) {
           for (let i = fields.length; i < yearAndMonthRangeLength; i++) {
-            append({ gross: "0", net: "0" });
+            append({ gross: 0, net: 0 });
           }
         }
       }

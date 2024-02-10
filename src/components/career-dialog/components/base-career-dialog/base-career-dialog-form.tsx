@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Period } from "./period";
-import { formSchema, FormSchema, TransformedFormSchema } from "./form-schema";
+import { formSchema, FormSchema } from "./form-schema";
 import { CompanyName } from "./company-name";
 import { SalaryTable } from "./salary-table";
 import { useCareers } from "@/hooks/use-careers";
@@ -20,30 +20,30 @@ export function BaseCareerDialogForm({
 }: BaseCareerDialogFormProps) {
   const { addCareer } = useCareers();
 
-  const form = useForm<FormSchema, any, TransformedFormSchema>({
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       companyName: defaultValues?.companyName ?? "",
-      startYear: `${defaultValues?.startYear ?? 2020}`,
-      startMonth: `${defaultValues?.startMonth ?? 1}`,
-      endYear: `${defaultValues?.endYear ?? 2020}`,
-      endMonth: `${defaultValues?.endMonth ?? 12}`,
+      startYear: defaultValues?.startYear ?? 2020,
+      startMonth: defaultValues?.startMonth ?? 1,
+      endYear: defaultValues?.endYear ?? 2020,
+      endMonth: defaultValues?.endMonth ?? 12,
       validEndYear: defaultValues?.endYear ?? 2020,
       validEndMonth: defaultValues?.endMonth ?? 12,
       isCurrentlyEmployed: defaultValues?.isCurrentlyEmployed ?? false,
       salaries:
         defaultValues?.salaries.map((salary) => ({
-          gross: `${salary.gross}`,
-          net: `${salary.net}`,
+          gross: salary.gross,
+          net: salary.net,
         })) ??
         Array.from({ length: 12 }).map(() => ({
-          gross: "0",
-          net: "0",
+          gross: 0,
+          net: 0,
         })),
     },
   });
 
-  const onSubmit: SubmitHandler<TransformedFormSchema> = (data) => {
+  const onSubmit: SubmitHandler<FormSchema> = (data) => {
     addCareer({
       companyName: data.companyName,
       startYear: data.startYear,

@@ -16,6 +16,7 @@ import { generateYearAndMonthRange } from "./utils/generate-year-and-month-range
 import { useEffect, useState } from "react";
 import { Period } from "./types";
 import { getPeriod } from "./utils/period";
+import { transform } from "./utils/number-input";
 
 interface SalaryTableRowProps {
   yearAndMonth: string;
@@ -40,7 +41,13 @@ function SalaryTableRow({ yearAndMonth, rowIndex }: SalaryTableRowProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input type="number" className="text-right" {...field} />
+                <Input
+                  type="number"
+                  className="text-right"
+                  {...field}
+                  onChange={(e) => field.onChange(transform.output(e))}
+                  value={transform.input(field.value)}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -53,7 +60,13 @@ function SalaryTableRow({ yearAndMonth, rowIndex }: SalaryTableRowProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input type="number" className="text-right" {...field} />
+                <Input
+                  type="number"
+                  className="text-right"
+                  {...field}
+                  onChange={(e) => field.onChange(transform.output(e))}
+                  value={transform.input(field.value)}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -75,10 +88,10 @@ export function SalaryTable() {
 
   useEffect(() => {
     const period = getPeriod(
-      parseInt(startYear),
-      parseInt(startMonth),
+      startYear,
+      startMonth,
       validEndYear,
-      validEndMonth,
+      validEndMonth
     );
 
     if (period) {
